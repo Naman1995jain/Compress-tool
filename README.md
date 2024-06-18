@@ -56,8 +56,7 @@ Start your server if it’s not already running. For example, if you are using X
 
 ## File Structure
 
-/image-compressor
-│
+- image-compressor
 ├── index.html          # Main HTML structure
 ├── styles.css          # CSS styles for the web page
 ├── compress.php        # Handles file upload and compression
