@@ -1,4 +1,4 @@
-//php code
+//main php code
 
 <?php
 
