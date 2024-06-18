@@ -1,5 +1,3 @@
-// html code
-
 <!DOCTYPE html>
 <html lang="en">
 
