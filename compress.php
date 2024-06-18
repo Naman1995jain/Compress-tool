@@ -1,3 +1,5 @@
+//php code
+
 <?php
 
 function handleImageUpload()
