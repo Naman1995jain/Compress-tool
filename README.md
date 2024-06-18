@@ -1,4 +1,4 @@
-#screenshot
+## Screenshot
 ![image](https://github.com/Naman1995jain/Compress-tool/assets/131385927/0a7993e5-83b0-468a-82a2-8f05c7f571e6)
 ![image](https://github.com/Naman1995jain/Compress-tool/assets/131385927/aeb97131-5cf4-4b56-b5e9-1a71529bf1d8)
 
