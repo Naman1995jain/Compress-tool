@@ -13,12 +13,30 @@ function handleImageUpload()
 
     $outputFormat = $_POST['format'] ?? 'jpg';
 
-    $outputImagePath = compressImageFile($_FILES['image']['tmp_name'], $imageType, $outputFormat);
+    // Get original size
+    $originalSize = filesize($_FILES['image']['tmp_name']) / 1024; // size in KB
+
+    // Ensure output directory exists
+    $outputDir = 'compressed_images/';
+    if (!is_dir($outputDir)) {
+        mkdir($outputDir, 0777, true);
+    }
+
+    $outputImagePath = compressImageFile($_FILES['image']['tmp_name'], $imageType, $outputFormat, $outputDir);
     if (!$outputImagePath) {
         return ['message' => 'Error compressing the image.'];
     }
 
-    return ['message' => 'Image uploaded successfully.', 'imageType' => $imageType, 'output_image' => $outputImagePath];
+    // Get compressed size
+    $compressedSize = filesize($outputImagePath) / 1024; // size in KB
+
+    return [
+        'message' => 'Image uploaded and compressed successfully.',
+        'imageType' => $imageType,
+        'output_image' => $outputImagePath,
+        'original_size' => number_format($originalSize, 2),
+        'compressed_size' => number_format($compressedSize, 2)
+    ];
 }
 
 function getImageMimeType($imagePath)
@@ -27,7 +45,7 @@ function getImageMimeType($imagePath)
     return $imageInfo ? $imageInfo['mime'] : false;
 }
 
-function compressImageFile($imagePath, $imageMimeType, $outputFormat)
+function compressImageFile($imagePath, $imageMimeType, $outputFormat, $outputDir)
 {
     // Create an image resource from the uploaded file
     $imageResource = createImageResource($imagePath, $imageMimeType);
@@ -35,13 +53,13 @@ function compressImageFile($imagePath, $imageMimeType, $outputFormat)
         return false;
     }
 
-    $outputFileName = 'compressed_' . time() . '.' . $outputFormat;
+    // Generate a unique output file name
+    $outputFileName = $outputDir . 'compressed_' . uniqid() . '.' . $outputFormat;
 
-    saveCompressedImage($imageResource, $outputFormat, $outputFileName);
-
+    $compressionSuccess = saveCompressedImage($imageResource, $outputFormat, $outputFileName);
     imagedestroy($imageResource);
 
-    return $outputFileName;
+    return $compressionSuccess ? $outputFileName : false;
 }
 
 function createImageResource($imagePath, $imageMimeType)

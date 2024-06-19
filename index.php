@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
     <header>
         <div class="logo">
             <h1>Compress Tool</h1>
@@ -26,12 +25,14 @@
     <div class="content">
         <div class="container">
             <h2>Compress Your Image</h2>
-            <form method="post" enctype="multipart/form-data">
-                <div class="file-upload">
-                    <input id="file-upload" type="file" name="image" required />
-                    <label for="file-upload">Choose Image</label>
-                    <div class="file-upload-text">Please upload a JPEG, PNG, or WEBP image.</div>
-                    <div class="file-upload-text2">Please Select The Type For Compress Your Img</div>
+            <form id="upload-form" method="post" enctype="multipart/form-data">
+                <div class="drag-and-drop" id="drop-area">
+                    <p>Drag & Drop your image here</p>
+                    <p>or</p>
+                    <p>Click to select image</p>
+                    <input type="file" id="file-upload" name="image" accept="image/jpeg, image/png, image/webp" />
+                    <div id="preview"></div>
+                    <div id="image-size"></div>
                 </div>
                 <div class="format-buttons">
                     <input type="radio" id="format-jpg" name="format" value="jpg" checked>
@@ -48,6 +49,10 @@
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $uploadResult = handleImageUpload();
                         echo $uploadResult['message'];
+                        if (isset($uploadResult['original_size']) && isset($uploadResult['compressed_size'])) {
+                            echo "<div class='size-info'>Original Size: " . $uploadResult['original_size'] . " KB</div>";
+                            echo "<div class='size-info'>Compressed Size: " . $uploadResult['compressed_size'] . " KB</div>";
+                        }
                     }
                     ?>
                 </div>
@@ -72,6 +77,7 @@
             </div>
         </div>
     </div>
+    <script src="scripts.js"></script>
 </body>
 
 </html>
